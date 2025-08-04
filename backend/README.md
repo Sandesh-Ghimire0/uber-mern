@@ -1,4 +1,4 @@
-# Backend API Documentation
+# User API Documentation
 
 ## Endpoint
 
@@ -192,3 +192,82 @@ Logs out the currently authenticated user by blacklisting their JWT token and cl
 
 - The token is blacklisted for 24 hours and cannot be used again.
 - The authentication cookie is cleared
+
+## Captain API Endpoints
+
+---
+
+### Register Captain
+
+**POST** `/captains/register`
+
+---
+
+#### Description
+
+Register a new captain by providing their name, email, password, and vehicle details.  
+Returns a JWT token and the created captain object on success.
+
+---
+
+#### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "string (min 3 chars, required)",
+    "lastname": "string (min 3 chars, optional)"
+  },
+  "email": "string (valid email, required)",
+  "password": "string (min 6 chars, required)",
+  "vehicle": {
+    "color": "string (min 3 chars, required)",
+    "plate": "string (min 3 chars, required)",
+    "capacity": "number (min 1, required)",
+    "vehicleType": "string (car | bike | auto, required)"
+  }
+}
+```
+
+##### Example
+
+```json
+{
+  "fullname": {
+    "firstname": "Bob",
+    "lastname": "Driver"
+  },
+  "email": "bob.driver@example.com",
+  "password": "securePass123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+#### Responses
+
+| Status Code | Description                  | Example Response Body                      |
+| ----------- | ---------------------------- | ------------------------------------------ |
+| 201         | Captain registered successfully | `{ "token": "...", "captain": { ... } }` |
+| 400         | Validation error             | `{ "errors": [ ... ] }`                   |
+| 500         | Server error                 | `{ "error": "Error message" }`            |
+
+---
+
+#### Notes
+
+- `firstname` is required and must be at least 3 characters.
+- `lastname` is optional but must be at least 3 characters if provided.
+- `email` must be a valid email address.
+- `password` must be at least 6 characters.
+- `vehicle.color` and `vehicle.plate` must be at least 3 characters.
+- `vehicle.capacity` must be a number and at least 1.
+- `vehicle.vehicleType` must be one of: `car`, `bike`, or `auto`
