@@ -120,4 +120,75 @@ Send a JSON object with the following structure:
 ### Notes
 
 -   `email` must be a valid email address.
--   `password` must be at
+-   `password` must be at least 6 characters
+
+
+## Endpoint
+
+**GET** `/users/profile`
+
+---
+
+### Description
+
+Retrieve the profile information of the currently authenticated user.
+
+---
+
+### Request
+
+- Requires authentication (JWT token in cookie or `Authorization` header).
+- No request body required.
+
+---
+
+### Responses
+
+| Status Code | Description                      | Example Response Body                |
+| ----------- | -------------------------------- | ------------------------------------ |
+| 200         | Profile fetched successfully     | `{ "user": { ...user fields... } }` |
+| 401         | Unauthorized or invalid token    | `{ "error": "Unauthorized access" }` |
+| 500         | Server error                     | `{ "error": "Error message" }`       |
+
+---
+
+### Notes
+
+- You must be logged in and provide a valid JWT token.
+- Returns the user object associated with the authenticated token.
+
+---
+
+## Endpoint
+
+**POST** `/users/logout`
+
+---
+
+### Description
+
+Logs out the currently authenticated user by blacklisting their JWT token and clearing the authentication cookie.
+
+---
+
+### Request
+
+- Requires authentication (JWT token in cookie or `Authorization` header).
+- No request body required.
+
+---
+
+### Responses
+
+| Status Code | Description                      | Example Response Body                       |
+| ----------- | -------------------------------- | ------------------------------------------- |
+| 200         | Logout successful                | `{ "message": "Logged out successfully" }`  |
+| 401         | Unauthorized or invalid token    | `{ "error": "Unauthorized access" }`        |
+| 500         | Server error                     | `{ "error": "Error message" }`              |
+
+---
+
+### Notes
+
+- The token is blacklisted for 24 hours and cannot be used again.
+- The authentication cookie is cleared
