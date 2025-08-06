@@ -19,7 +19,6 @@ const registerUser = async (req, res) => {
 
     const hashedPassword = await userModel.hashPassword(password);
 
-
     try {
         const user = await createUser({
             firstname: fullname.firstname,
@@ -64,9 +63,9 @@ const getUserProfile = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-    res.clearCookie("token");
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
     await blacklistTokenModel.create({ token });
+    res.clearCookie("token");
 
     return res.status(200).json({ message: "Logged out successfully" });
 };

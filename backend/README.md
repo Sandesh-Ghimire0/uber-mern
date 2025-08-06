@@ -1,4 +1,6 @@
-# User API Documentation
+# Backend API Documentation
+
+# User API Endpoints
 
 ## Endpoint
 
@@ -122,7 +124,6 @@ Send a JSON object with the following structure:
 -   `email` must be a valid email address.
 -   `password` must be at least 6 characters
 
-
 ## Endpoint
 
 **GET** `/users/profile`
@@ -137,25 +138,25 @@ Retrieve the profile information of the currently authenticated user.
 
 ### Request
 
-- Requires authentication (JWT token in cookie or `Authorization` header).
-- No request body required.
+-   Requires authentication (JWT token in cookie or `Authorization` header).
+-   No request body required.
 
 ---
 
 ### Responses
 
-| Status Code | Description                      | Example Response Body                |
-| ----------- | -------------------------------- | ------------------------------------ |
-| 200         | Profile fetched successfully     | `{ "user": { ...user fields... } }` |
-| 401         | Unauthorized or invalid token    | `{ "error": "Unauthorized access" }` |
-| 500         | Server error                     | `{ "error": "Error message" }`       |
+| Status Code | Description                   | Example Response Body                |
+| ----------- | ----------------------------- | ------------------------------------ |
+| 200         | Profile fetched successfully  | `{ "user": { ...user fields... } }`  |
+| 401         | Unauthorized or invalid token | `{ "error": "Unauthorized access" }` |
+| 500         | Server error                  | `{ "error": "Error message" }`       |
 
 ---
 
 ### Notes
 
-- You must be logged in and provide a valid JWT token.
-- Returns the user object associated with the authenticated token.
+-   You must be logged in and provide a valid JWT token.
+-   Returns the user object associated with the authenticated token.
 
 ---
 
@@ -173,27 +174,27 @@ Logs out the currently authenticated user by blacklisting their JWT token and cl
 
 ### Request
 
-- Requires authentication (JWT token in cookie or `Authorization` header).
-- No request body required.
+-   Requires authentication (JWT token in cookie or `Authorization` header).
+-   No request body required.
 
 ---
 
 ### Responses
 
-| Status Code | Description                      | Example Response Body                       |
-| ----------- | -------------------------------- | ------------------------------------------- |
-| 200         | Logout successful                | `{ "message": "Logged out successfully" }`  |
-| 401         | Unauthorized or invalid token    | `{ "error": "Unauthorized access" }`        |
-| 500         | Server error                     | `{ "error": "Error message" }`              |
+| Status Code | Description                   | Example Response Body                      |
+| ----------- | ----------------------------- | ------------------------------------------ |
+| 200         | Logout successful             | `{ "message": "Logged out successfully" }` |
+| 401         | Unauthorized or invalid token | `{ "error": "Unauthorized access" }`       |
+| 500         | Server error                  | `{ "error": "Error message" }`             |
 
 ---
 
 ### Notes
 
-- The token is blacklisted for 24 hours and cannot be used again.
-- The authentication cookie is cleared
+-   The token is blacklisted for 24 hours and cannot be used again.
+-   The authentication cookie is cleared
 
-## Captain API Endpoints
+# Captain API Endpoints
 
 ---
 
@@ -216,18 +217,18 @@ Send a JSON object with the following structure:
 
 ```json
 {
-  "fullname": {
-    "firstname": "string (min 3 chars, required)",
-    "lastname": "string (min 3 chars, optional)"
-  },
-  "email": "string (valid email, required)",
-  "password": "string (min 6 chars, required)",
-  "vehicle": {
-    "color": "string (min 3 chars, required)",
-    "plate": "string (min 3 chars, required)",
-    "capacity": "number (min 1, required)",
-    "vehicleType": "string (car | bike | auto, required)"
-  }
+    "fullname": {
+        "firstname": "string (min 3 chars, required)",
+        "lastname": "string (min 3 chars, optional)"
+    },
+    "email": "string (valid email, required)",
+    "password": "string (min 6 chars, required)",
+    "vehicle": {
+        "color": "string (min 3 chars, required)",
+        "plate": "string (min 3 chars, required)",
+        "capacity": "number (min 1, required)",
+        "vehicleType": "string (car | bike | auto, required)"
+    }
 }
 ```
 
@@ -235,18 +236,18 @@ Send a JSON object with the following structure:
 
 ```json
 {
-  "fullname": {
-    "firstname": "Bob",
-    "lastname": "Driver"
-  },
-  "email": "bob.driver@example.com",
-  "password": "securePass123",
-  "vehicle": {
-    "color": "Red",
-    "plate": "XYZ1234",
-    "capacity": 4,
-    "vehicleType": "car"
-  }
+    "fullname": {
+        "firstname": "Bob",
+        "lastname": "Driver"
+    },
+    "email": "bob.driver@example.com",
+    "password": "securePass123",
+    "vehicle": {
+        "color": "Red",
+        "plate": "XYZ1234",
+        "capacity": 4,
+        "vehicleType": "car"
+    }
 }
 ```
 
@@ -254,20 +255,126 @@ Send a JSON object with the following structure:
 
 #### Responses
 
-| Status Code | Description                  | Example Response Body                      |
-| ----------- | ---------------------------- | ------------------------------------------ |
+| Status Code | Description                     | Example Response Body                    |
+| ----------- | ------------------------------- | ---------------------------------------- |
 | 201         | Captain registered successfully | `{ "token": "...", "captain": { ... } }` |
-| 400         | Validation error             | `{ "errors": [ ... ] }`                   |
-| 500         | Server error                 | `{ "error": "Error message" }`            |
+| 400         | Validation error                | `{ "errors": [ ... ] }`                  |
+| 500         | Server error                    | `{ "error": "Error message" }`           |
 
 ---
 
 #### Notes
 
-- `firstname` is required and must be at least 3 characters.
-- `lastname` is optional but must be at least 3 characters if provided.
-- `email` must be a valid email address.
-- `password` must be at least 6 characters.
-- `vehicle.color` and `vehicle.plate` must be at least 3 characters.
-- `vehicle.capacity` must be a number and at least 1.
-- `vehicle.vehicleType` must be one of: `car`, `bike`, or `auto`
+-   `firstname` is required and must be at least 3 characters.
+-   `lastname` is optional but must be at least 3 characters if provided.
+-   `email` must be a valid email address.
+-   `password` must be at least 6 characters.
+-   `vehicle.color` and `vehicle.plate` must be at least 3 characters.
+-   `vehicle.capacity` must be a number and at least 1.
+-   `vehicle.vehicleType` must be one of: `car`, `bike`, or `auto`
+
+## Captain API Endpoints
+
+---
+
+### Login Captain
+
+**POST** `/captains/login`
+
+---
+
+#### Description
+
+Authenticate an existing captain using their email and password.  
+Returns a JWT token and the captain object on successful login.
+
+---
+
+#### Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+    "email": "string (valid email, required)",
+    "password": "string (min 6 chars, required)"
+}
+```
+
+##### Example
+
+```json
+{
+    "email": "bob.driver@example.com",
+    "password": "securePass123"
+}
+```
+
+---
+
+#### Responses
+
+| Status Code | Description               | Example Response Body                      |
+| ----------- | ------------------------- | ------------------------------------------ |
+| 200         | Login successful          | `{ "token": "...", "captain": { ... } }`   |
+| 400         | Validation error          | `{ "errors": [ ... ] }`                    |
+| 401         | Invalid email or password | `{ "error": "Invalid email or password" }` |
+| 500         | Server error              | `{ "error": "Error message" }`             |
+
+---
+
+### Get Captain Profile
+
+**GET** `/captains/profile`
+
+---
+
+#### Description
+
+Retrieve the profile information of the currently authenticated captain.
+
+---
+
+#### Request
+
+-   Requires authentication (JWT token in cookie or `Authorization` header).
+-   No request body required.
+
+---
+
+#### Responses
+
+| Status Code | Description                   | Example Response Body                     |
+| ----------- | ----------------------------- | ----------------------------------------- |
+| 200         | Profile fetched successfully  | `{ "captain": { ...captain fields... } }` |
+| 401         | Unauthorized or invalid token | `{ "error": "Unauthorized access" }`      |
+| 500         | Server error                  | `{ "error": "Error message" }`            |
+
+---
+
+### Logout Captain
+
+**POST** `/captains/logout`
+
+---
+
+#### Description
+
+Logs out the currently authenticated captain by blacklisting their JWT token and clearing the authentication cookie.
+
+---
+
+#### Request
+
+-   Requires authentication (JWT token in cookie or `Authorization` header).
+-   No request body required.
+
+---
+
+#### Responses
+
+| Status Code | Description                   | Example Response Body                      |
+| ----------- | ----------------------------- | ------------------------------------------ |
+| 200         | Logout successful             | `{ "message": "Logged out successfully" }` |
+| 401         | Unauthorized or invalid token | `{ "error": "Unauthorized access" }`       |
+| 500         | Server error                  | `{ "error": "Error message" }              |
