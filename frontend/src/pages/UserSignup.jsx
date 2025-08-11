@@ -1,31 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useDebugValue } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function UserSignup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [fistname, setFirstname] = useState("");
+    const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
 
-    const [userData, setUserData] = useState({})
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(UserDataContext);
 
-    const submitHandler = (e) => {
-        e.preventDefault()
+    const submitHandler = async (e) => {
+        e.preventDefault();
 
-        setUserData({
-            fullname:{
-                fistname,
-                lastname
+        const newUser = {
+            fullname: {
+                firstname,
+                lastname,
             },
             password,
-            email
-        })
+            email,
+        };
 
-        setEmail('')
-        setPassword('')
-        setFirstname('')
-        setLastname('')
-    }
+        const res = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/api/users/register`,
+            newUser
+        );
+        if (res.status === 201) {
+            const data = res.data;
+            setUser(data.user);
+            localStorage.setItem("token", data.token);
+
+            navigate("/home");
+        }
+
+        setEmail("");
+        setPassword("");
+        setFirstname("");
+        setLastname("");
+    };
 
     return (
         <div className="p-8 flex flex-col justify-between h-screen">
@@ -38,7 +54,7 @@ function UserSignup() {
                             className="px-4 w-1/2 py-2 mb-8 bg-[#eeeeee] rounded"
                             type="text"
                             placeholder="First Name"
-                            value={fistname}
+                            value={firstname}
                             onChange={(e) => setFirstname(e.target.value)}
                             required
                         />
@@ -73,7 +89,7 @@ function UserSignup() {
                     />
 
                     <button className="mt-20 w-full flex justify-center items-center py-3 font-bold bg-black text-white rounded">
-                        Login
+                        Create Account
                     </button>
 
                     <p className="text-center mt-3">

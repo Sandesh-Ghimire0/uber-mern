@@ -1,25 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { CaptainDataContext } from "../contexts/CaptainContext";
+import axios from "axios";
 
 function CaptainLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [captainData, setCaptainData] = useState({});
 
-    const submitHandler = (e) => {
+    const { captain, setCaptain } = useContext(CaptainDataContext);
+    const navigate = useNavigate();
+
+    const submitHandler = async (e) => {
         e.preventDefault();
-        setCaptainData({
+
+        const captain = {
             email,
             password,
-        });
+        };
+
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/api/captains/login`,
+                captain
+            );
+
+            if (res.status === 200) {
+                const data = res.data;
+                setCaptain(data.captain);
+                localStorage.setItem("token", data.token);
+
+                navigate("/captain-home");
+            }
+        } catch (error) {
+            console.log("Failed to login captain : ", error);
+        }
+
         setEmail("");
         setPassword("");
     };
     return (
         <div className="p-8 flex flex-col justify-between h-screen">
             <div>
-                 <h1 className="text-2xl font-bold mb-2">Uber</h1>
+                <h1 className="text-2xl font-bold mb-2">Uber</h1>
                 <h2 className="text-xl font-semibold mb-5">Login as Captain</h2>
                 <form action="" onSubmit={submitHandler}>
                     <h2 className="mb-2">What's your email</h2>
